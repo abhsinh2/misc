@@ -1,0 +1,8 @@
+PurchaseOrder,CompanyCode,PurchaseOrderType,Supplier,to_PurchaseOrderItem_results_PurchaseOrder,to_PurchaseOrderItem_results_PurchaseOrderItem,to_PurchaseOrderItem_results_Plant,to_PurchaseOrderItem_results_MaterialGroup,to_PurchaseOrderItem_results_OrderQuantity,to_PurchaseOrderItem_results_PurchaseOrderQuantityUnit,to_PurchaseOrderItem_results_NetPriceAmount,to_PurchaseOrderItem_results_DocumentCurrency,to_PurchaseOrderItem_results_NetPriceQuantity,to_PurchaseOrderItem_results_to_AccountAssignment_results_PurchaseOrder,to_PurchaseOrderItem_results_to_AccountAssignment_results_PurchaseOrderItem,to_PurchaseOrderItem_results_to_AccountAssignment_results_AccountAssignmentNumber,to_PurchaseOrderItem_results_to_AccountAssignment_results_DocumentCurrency,PaymentTerms
+4500000017,1710,NB,17300030,,,,,,,,,,,,,,
+4500000017,1710,NB,17300030,4500000017,10,1710,L004,100,PC,50.00,USD,,,,,,
+4500000017,1710,NB,17300030,4500000017,20,1710,L001,100,PC,200.00,USD,1,,,,,
+4500000017,1710,NB,17300030,4500000017,20,1710,L001,100,PC,200.00,USD,1,4500000017,20,L004,USD,
+4500000017,1710,NB,17300030,4500000017,20,1710,L001,100,PC,200.00,USD,1,4500000017,20,L005,INR,
+4500000018,1710,NB,17300080,,,,,,,,,,,,,,0004
+4500000018,1710,NB,17300080,4500000018,10,1710,L001,10000,PC,30.00,,,,,,,0004
