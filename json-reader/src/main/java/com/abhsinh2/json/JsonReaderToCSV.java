@@ -28,7 +28,9 @@ public class JsonReaderToCSV {
 		JsonNode rootNode = mapper.readTree(new File(
 				"/Users/abhsinh2/Abhishek/github/misc/json-reader/src/main/resources/test.json"));
 
-		List<Map<String, String>> records = readRoot(rootNode);
+		//Collection<Map<String, String>> records = readRoot(rootNode, false);
+		Collection<Map<String, String>> records = readRoot(rootNode.get("d"), false);
+		//Collection<Map<String, String>> records = readRoot(rootNode.get("d").get("results"), true);
 
 		System.out.println("================================");
 		records.forEach(record -> System.out.println(record));
@@ -65,105 +67,74 @@ public class JsonReaderToCSV {
 		csvPrinter.close();
 	}
 
-	private static List<Map<String, String>> readRoot(JsonNode root) {
-		List<Map<String, String>> records = new ArrayList<>();
+	private static Collection<Map<String, String>> readRoot(JsonNode root, boolean isResultData) {
+		Collection<Map<String, String>> records = new ArrayList<>();
 		if (root.isObject()) {
-			readObject(root, null, records, null);
+			readObject(root, null, records, null, isResultData);
 		} else if (root.isArray()) {
-			readArray(root, null, records, null);
+			readArray(root, null, records, null, isResultData);
 		}
 		return records;
 	}
 
-	private static void readObject(JsonNode node, String parentKey, List<Map<String, String>> records,
-			Map<String, String> record) {
+	private static void readObject(JsonNode node, String parentKey, Collection<Map<String, String>> records,
+			Map<String, String> record, boolean isResultData) {
+		
+		// System.out.println("Got Parent " + parentKey);
+		// System.out.println("Got Record " + record);
+		
+		Map<String, String> newRecord = null;
+		if (record == null) {
+			newRecord = new LinkedHashMap<>();
+		} else {
+			newRecord = new LinkedHashMap<>();
+			newRecord.putAll(record);
+		}	
+		
+		if (isResultData)
+			records.add(newRecord);
+		
 		Iterator<Map.Entry<String, JsonNode>> childNodeIter = node.fields();
 		while (childNodeIter.hasNext()) {
 			Map.Entry<String, JsonNode> childEntry = childNodeIter.next();
 			String childKey = childEntry.getKey();
 			JsonNode childNode = childEntry.getValue();
 
-			if (childKey.equals("results")) {
-				if (parentKey == null) {
-					readResult(childNode, null, records, record);
+			if (!IGNORE_LIST.contains(childKey)) {				
+				if (childNode.isArray()) {
+					if (parentKey == null) {
+						readArray(childNode, childKey, records, newRecord, childKey.equals("results"));
+					} else {
+						readArray(childNode, parentKey + "_" + childKey, records, newRecord, childKey.equals("results"));
+					}
+				} else if (childNode.isObject()) {
+					if (parentKey == null) {
+						readObject(childNode, childKey, records, newRecord, childKey.equals("results"));
+					} else {
+						readObject(childNode, parentKey + "_" + childKey, records, newRecord, childKey.equals("results"));
+					}
 				} else {
-					readResult(childNode, parentKey + "_" + childKey, records, record);
-				}				
-			} else {
-				if (node.isObject()) {
-					readObject(childNode, parentKey, records, record);
-				} else if (node.isArray()) {
-					readArray(childNode, parentKey, records, record);
+					if (parentKey == null) {
+						System.out.println(childKey + ":" + childNode);
+						newRecord.put(childKey, childNode.asText());
+					} else {
+						System.out.println(parentKey + "_" + childKey + ":" + childNode);
+						newRecord.put(parentKey + "_" + childKey, childNode.asText());
+					}
 				}
 			}
 		}
 	}
 
-	private static void readArray(JsonNode node, String parentKey, List<Map<String, String>> records,
-			Map<String, String> record) {
+	private static void readArray(JsonNode node, String parentKey, Collection<Map<String, String>> records,
+			Map<String, String> record, boolean isResultData) {
 		Iterator<JsonNode> nodeIter = node.iterator();
 		while (nodeIter.hasNext()) {
 			JsonNode childNode = nodeIter.next();
 			if (childNode.isObject()) {
-				readObject(childNode, parentKey, records, record);
+				readObject(childNode, parentKey, records, record, isResultData);
 			} else if (childNode.isArray()) {
-				readArray(childNode, parentKey, records, record);
-			}
-		}
-	}
-
-	private static void readResult(JsonNode resultNode, String parentKey, List<Map<String, String>> records,
-			Map<String, String> record) {
-		if (resultNode.isArray()) {
-			Iterator<JsonNode> resultNodeIter = resultNode.iterator();
-			while (resultNodeIter.hasNext()) {
-
-				Map<String, String> newRecord = null;
-				if (record == null) {
-					newRecord = new LinkedHashMap<>();
-				} else {
-					newRecord = new LinkedHashMap<>();
-					newRecord.putAll(record);
-				}
-
-				records.add(newRecord);
-
-				JsonNode result = resultNodeIter.next();
-
-				if (result.isObject()) {
-					Iterator<Map.Entry<String, JsonNode>> entries = result.fields();
-					while (entries.hasNext()) {
-						Map.Entry<String, JsonNode> entry = entries.next();
-						String key = entry.getKey();
-						JsonNode value = entry.getValue();
-
-						if (!IGNORE_LIST.contains(key)) {
-							if (value.isArray()) {
-								if (parentKey == null) {
-									readArray(value, key, records, newRecord);
-								} else {
-									readArray(value, parentKey + "_" + key, records, newRecord);
-								}
-							} else if (value.isObject()) {
-								if (parentKey == null) {
-									readObject(value, key, records, newRecord);
-								} else {
-									readObject(value, parentKey + "_" + key, records, newRecord);
-								}
-							} else {
-								if (parentKey == null) {
-									System.out.println(key + ":" + value);
-									newRecord.put(key, value.asText());
-								} else {
-									System.out.println(parentKey + "_" + key + ":" + value);
-									newRecord.put(parentKey + "_" + key, value.asText());
-								}
-							}
-						}
-					}
-				}
-
-				System.out.println("-------------------------------------------");
+				readArray(childNode, parentKey, records, record, isResultData);
 			}
 		}
 	}
