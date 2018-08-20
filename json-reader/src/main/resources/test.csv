@@ -1,8 +1,7 @@
-results_PurchaseOrder,results_CompanyCode,results_PurchaseOrderType,results_Supplier,results_to_PurchaseOrderItem_results_PurchaseOrder,results_to_PurchaseOrderItem_results_PurchaseOrderItem,results_to_PurchaseOrderItem_results_Plant,results_to_PurchaseOrderItem_results_MaterialGroup,results_to_PurchaseOrderItem_results_OrderQuantity,results_to_PurchaseOrderItem_results_PurchaseOrderQuantityUnit,results_to_PurchaseOrderItem_results_NetPriceAmount,results_to_PurchaseOrderItem_results_DocumentCurrency,results_to_PurchaseOrderItem_results_NetPriceQuantity,results_to_PurchaseOrderItem_results_to_AccountAssignment_results_PurchaseOrder,results_to_PurchaseOrderItem_results_to_AccountAssignment_results_PurchaseOrderItem,results_to_PurchaseOrderItem_results_to_AccountAssignment_results_AccountAssignmentNumber,results_to_PurchaseOrderItem_results_to_AccountAssignment_results_DocumentCurrency,results_PaymentTerms
-4500000017,1710,NB,17300030,,,,,,,,,,,,,,
-4500000017,1710,NB,17300030,4500000017,10,1710,L004,100,PC,50.00,USD,,,,,,
-4500000017,1710,NB,17300030,4500000017,20,1710,L001,100,PC,200.00,USD,1,,,,,
-4500000017,1710,NB,17300030,4500000017,20,1710,L001,100,PC,200.00,USD,1,4500000017,20,L004,USD,
-4500000017,1710,NB,17300030,4500000017,20,1710,L001,100,PC,200.00,USD,1,4500000017,20,L005,INR,
-4500000018,1710,NB,17300080,,,,,,,,,,,,,,0004
-4500000018,1710,NB,17300080,4500000018,10,1710,L001,10000,PC,30.00,,,,,,,0004
+results_PO,results_results_PO,results_results_PO_Item
+,,
+001,,
+001,001,Screw
+001,001,Nuts
+002,,
+002,002,rope
